@@ -102,7 +102,7 @@ function handleGameDraw() {
 		PAUSE_PLAY_OVERLAY.classList.remove('show');
 	}
 
-	if (gamePlayInteractionStarted) {
+	if (gamePlayInteractionStarted && !gameOver) {
 		PAUSE_PLAY_BTN.removeAttribute('disabled');
 	} else {
 		PAUSE_PLAY_BTN.setAttribute('disabled', 'true');
