@@ -50,6 +50,9 @@ let snakeDesiredDirection,
 	snakeCurrentDirection, 
 	snakePrevDirection;
 
+// Func Order
+// Handle - On(raise) -> Util -> Did(util2.0) -> Update -> Set -> Draw
+
 GAME_START_SCREEN.innerText = GAME_START_SCREEN.dataset.loadingMsg;
 GAME_START_SCREEN.classList.add('show');
 
@@ -58,7 +61,9 @@ PAUSE_PLAY_BTN.addEventListener('click', pausePlaySnakeGame);
 PLAY_AGAIN_BTN.addEventListener('click', startNewGame);
 gameEngineLoop_1 = requestAnimationFrame(handleGameLoop);
 document.addEventListener('keydown', onKeydown);
-window.addEventListener('load', () => {
+window.addEventListener('load', () => handleGameAssetsReady);
+
+function handleGameAssetsReady() {
 	if (window.outerWidth < SCREEN_CAN_PLAY) {
 		GAME_START_SCREEN.innerText = GAME_START_SCREEN.dataset.cantPlayMsg;
 		GAME_START_SCREEN.classList.add('show');
@@ -66,7 +71,7 @@ window.addEventListener('load', () => {
 		startNewGame();
 		GAME_START_SCREEN.classList.remove('show');
 	}
-});
+}
 
 function handleGameSounds() {
 	if (!gameSoundsOn) return;
@@ -341,7 +346,7 @@ function updateSnake() {
 }
 
 function updateGameScores() {
-	scoreValue = SNAKE_CHARACTER.foodEaten.growth*8;
+	scoreValue = SNAKE_CHARACTER.foodEaten.growth*9;
 }
 
 function setGamePlayInteractionStarted() {
