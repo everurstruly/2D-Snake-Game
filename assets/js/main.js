@@ -50,15 +50,14 @@ let snakeDesiredDirection,
 	snakeCurrentDirection, 
 	snakePrevDirection;
 
+GAME_START_SCREEN.innerText = GAME_START_SCREEN.dataset.loadingMsg;
+GAME_START_SCREEN.classList.add('show');
+
 GAME_SOUNDS_BTN.addEventListener('click', toggleGameSounds);
 PAUSE_PLAY_BTN.addEventListener('click', pausePlaySnakeGame);
 PLAY_AGAIN_BTN.addEventListener('click', startNewGame);
 gameEngineLoop_1 = requestAnimationFrame(handleGameLoop);
 document.addEventListener('keydown', onKeydown);
-
-GAME_START_SCREEN.innerText = GAME_START_SCREEN.dataset.loadingMsg;
-GAME_START_SCREEN.classList.add('show');
-
 window.addEventListener('load', () => {
 	if (window.outerWidth < SCREEN_CAN_PLAY) {
 		GAME_START_SCREEN.innerText = GAME_START_SCREEN.dataset.cantPlayMsg;
@@ -68,6 +67,85 @@ window.addEventListener('load', () => {
 		GAME_START_SCREEN.classList.remove('show');
 	}
 });
+
+function handleGameSounds() {
+	if (!gameSoundsOn) return;
+	if (snakeTouchFood) EAT_SFX.play();
+	if (gameOver) DEAD_SFX.play();
+}
+
+function handleGameUpdate() {
+	if (gamePaused || !gamePlayInteractionStarted) return;
+	// order of funcitons matter!
+	updateSnakeDirection();
+	updateGameOver();
+	updateSnakeTouchFood()
+	updateSnakeFood();
+	updateSnake();
+	updateGameScores();
+}
+
+function handleGameDraw() {
+	// order of funcitons matter!
+	drawTileMap();
+	drawSnakeFood();
+	drawSnake();
+	drawGameScores();
+	if (gamePaused) {
+		PAUSE_PLAY_OVERLAY.classList.add('show');
+	} else {
+		PAUSE_PLAY_OVERLAY.classList.remove('show');
+	}
+
+	if (gamePlayInteractionStarted) {
+		PAUSE_PLAY_BTN.removeAttribute('disabled');
+	} else {
+		PAUSE_PLAY_BTN.setAttribute('disabled', 'true');
+	}
+}
+
+let lastRenderFrameTime = 0;
+function handleGameLoop(currentFrameRenderTime) {
+	requestAnimationFrame(handleGameLoop);
+	if (gameOver) return;
+	const timeLastRenderedFrame = (currentFrameRenderTime-lastRenderFrameTime)/1000;
+	if (timeLastRenderedFrame < (1/gameEngineSpeed)) return;
+	lastRenderFrameTime = currentFrameRenderTime;
+	handleGameUpdate();
+	handleGameDraw();
+	handleGameSounds();
+}
+
+function handleControllerDirection(e) {
+	setGamePlayInteractionStarted();
+	const direction = e.currentTarget.dataset.direction;
+	snakeDesiredDirection = GRID_DIRECTION[direction];
+}
+
+function onKeydown(e) {
+	setGamePlayInteractionStarted();
+
+	// space key
+	if (e.keyCode === 32) {
+		pausePlaySnakeGame();
+	}
+	// up-arow or w key
+	if (e.keyCode === 38 || e.keyCode === 87) {
+		snakeDesiredDirection = GRID_DIRECTION.up;
+	}
+	// right-arow or d key
+	if (e.keyCode === 39 || e.keyCode === 68) {
+		snakeDesiredDirection = GRID_DIRECTION.right;
+	}
+	// down-arow or s key
+	if (e.keyCode === 40 || e.keyCode === 83) {
+		snakeDesiredDirection = GRID_DIRECTION.down;
+	}
+	// left-arow or a key
+	if (e.keyCode === 37 || e.keyCode === 65) {
+		snakeDesiredDirection = GRID_DIRECTION.left;
+	}
+}
 
 function startNewGame() {
 	gameOver = false;
@@ -255,7 +333,7 @@ function updateSnake() {
 }
 
 function updateGameScores() {
-	scoreValue = SNAKE_CHARACTER.foodEaten.growth*6;
+	scoreValue = SNAKE_CHARACTER.foodEaten.growth*8;
 }
 
 function setGamePlayInteractionStarted() {
@@ -499,83 +577,4 @@ function drawGameScores() {
 	if (scoreValue < 10) SCORE.innerText = `0${scoreValue}`;
 	else SCORE.innerText = scoreValue;
 	if (gameOver) HIGHSCORE.innerText = SCORE.innerText;
-}
-
-function handleGameSounds() {
-	if (!gameSoundsOn) return;
-	if (snakeTouchFood) EAT_SFX.play();
-	if (gameOver) DEAD_SFX.play();
-}
-
-function handleGameUpdate() {
-	if (gamePaused || !gamePlayInteractionStarted) return;
-	// order of funcitons matter!
-	updateSnakeDirection();
-	updateGameOver();
-	updateSnakeTouchFood()
-	updateSnakeFood();
-	updateSnake();
-	updateGameScores();
-}
-
-function handleGameDraw() {
-	// order of funcitons matter!
-	drawTileMap();
-	drawSnakeFood();
-	drawSnake();
-	drawGameScores();
-	if (gamePaused) {
-		PAUSE_PLAY_OVERLAY.classList.add('show');
-	} else {
-		PAUSE_PLAY_OVERLAY.classList.remove('show');
-	}
-
-	if (gamePlayInteractionStarted) {
-		PAUSE_PLAY_BTN.removeAttribute('disabled');
-	} else {
-		PAUSE_PLAY_BTN.setAttribute('disabled', 'true');
-	}
-}
-
-let lastRenderFrameTime = 0;
-function handleGameLoop(currentFrameRenderTime) {
-	requestAnimationFrame(handleGameLoop);
-	if (gameOver) return;
-	const timeLastRenderedFrame = (currentFrameRenderTime-lastRenderFrameTime)/1000;
-	if (timeLastRenderedFrame < (1/gameEngineSpeed)) return;
-	lastRenderFrameTime = currentFrameRenderTime;
-	handleGameUpdate();
-	handleGameDraw();
-	handleGameSounds();
-}
-
-function handleControllerDirection(e) {
-	setGamePlayInteractionStarted();
-	const direction = e.currentTarget.dataset.direction;
-	snakeDesiredDirection = GRID_DIRECTION[direction];
-}
-
-function onKeydown(e) {
-	setGamePlayInteractionStarted();
-
-	// space key
-	if (e.keyCode === 32) {
-		pausePlaySnakeGame();
-	}
-	// up-arow or w key
-	if (e.keyCode === 38 || e.keyCode === 87) {
-		snakeDesiredDirection = GRID_DIRECTION.up;
-	}
-	// right-arow or d key
-	if (e.keyCode === 39 || e.keyCode === 68) {
-		snakeDesiredDirection = GRID_DIRECTION.right;
-	}
-	// down-arow or s key
-	if (e.keyCode === 40 || e.keyCode === 83) {
-		snakeDesiredDirection = GRID_DIRECTION.down;
-	}
-	// left-arow or a key
-	if (e.keyCode === 37 || e.keyCode === 65) {
-		snakeDesiredDirection = GRID_DIRECTION.left;
-	}
 }
