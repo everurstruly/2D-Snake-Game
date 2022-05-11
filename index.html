@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Game [Snake] - oghenetefa</title>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+	<link rel="stylesheet" href="assets/css/style.css">
+	<script defer type="module" src="assets/js/main.js"></script>
+</head>
+<body>
+	<div id="app">
+		<main id="main">
+			<section id="snake-game" class="section">
+				<div 
+					data-loading-msg="🚀 Loading Game 🚀" 
+					data-cant-play-msg="😭 You need a Device with larger screen, Sorry 😭"
+					class="snake-game__can-play show"
+				></div>
+
+				<header class="section__header">
+					<h1 class="section__title">Snake Game</h1>
+				</header>
+				<div class="section__content playground-info">
+					<div class="playground-info__item">
+						<h4 class="playground-info__title">Score</h4>
+						<span id="snake-game__score-count" class="playground-info__value">03</span>
+					</div>
+					<div class="playground-info__item">
+						<h4 class="playground-info__title">Highscore</h4>
+						<span id="snake-game__highscore-count" class="playground-info__value">00</span>
+					</div>
+				</div>
+
+				<div class="wtf-layout">
+					<div class="section__content playground">
+						<canvas id="snake-game__board" width="500px" height="500px"></canvas>
+
+						<div class="pause-play-overlay">
+							<div class="icon-bg">
+								<span class="text">PAUSED</span>
+							</div>
+						</div>
+						<div class="snake-game__assets" style="display:none">
+							<img class="brick-wall" src="./assets/img/snake-game-walls/brick.png" alt="brick wall png">
+							<img class="apple-red" src="./assets/img/snake-game-foods/apple-red.png" alt="red apple for growth png">
+							<audio class="activity-eat" src="./assets/audio/character-activity/eat.mp3"></audio>
+							<audio class="activity-eat" src="./assets/audio/character-activity/eat.mp3"></audio>
+							<audio class="checkpoint-dead" src="./assets/audio/game-checkpoint/dead.mp3"></audio>
+							<audio class="checkpoint-dead-2" src="./assets/audio/game-checkpoint/game-over.wav"></audio>
+							<audio class="direction-up" src="./assets/audio/character-direction/up.mp3"></audio>
+							<audio class="direction-right" src="./assets/audio/character-direction/right.mp3"></audio>
+							<audio class="direction-down" src="./assets/audio/character-direction/down.mp3"></audio>
+							<audio class="direction-left" src="./assets/audio/character-direction/left.mp3"></audio>
+						</div>
+					</div>
+
+					<div class="section__content snake-game__controller">
+						<h4 class="snake-game__controller-name">Game Controls</h4>
+						<button disabled data-paused="false" class="pause-play btn">
+							<span class="text">Pause / Play</span>
+							<span class="pause icon">⏸</span>
+							<span class="play icon">▶️</span>
+						</button>
+						<button data-sounds-on="true" class="game-sounds-toggle btn">
+							<span class="text">Sounds</span>
+							<span class="on icon">🔉</span>
+							<span class="off icon">🔇</span>
+						</button>
+						<button class="play-again btn">
+							<span class="icon">💥</span>
+							<span class="text">Play-again</span>
+							<span class="icon">💥</span>
+						</button>
+						<small style="margin-top: .5rem;">Note: Click on any key/direction to start</small>
+
+						<div class="direction">
+							<button data-direction="up" class="btn direction__up">
+								<span class="icon">🔼</span>
+							</button>
+							<button data-direction="left" class="btn direction__left">
+								<span class="icon">◀️</span>
+							</button>
+							<button data-direction="right" class="btn direction__right">
+								<span class="icon">▶️</span>
+							</button>
+							<button data-direction="down" class="btn direction__down">
+								<span class="icon">🔽</span>
+							</button>
+						</div>
+						<small style="margin-top: 1rem;">Recommended: Use your keyboard</small>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+</body>
+</html>
