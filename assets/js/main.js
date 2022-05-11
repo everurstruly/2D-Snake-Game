@@ -36,7 +36,7 @@ const SNAKE_CHARACTER = new Snake();
 const SNAKE_COSTUME = new SnakeClrOutfit();
 
 let gameEngineLoop_1,
-	gameEngineSpeed = 6;
+	gameEngineSpeed = 5;
 
 let gameSoundsOn = true;
 let gameOver, 
@@ -111,9 +111,16 @@ function handleGameLoop(currentFrameRenderTime) {
 	const timeLastRenderedFrame = (currentFrameRenderTime-lastRenderFrameTime)/1000;
 	if (timeLastRenderedFrame < (1/gameEngineSpeed)) return;
 	lastRenderFrameTime = currentFrameRenderTime;
+	handleGameSpeed();
 	handleGameUpdate();
 	handleGameDraw();
 	handleGameSounds();
+}
+
+function handleGameSpeed() {
+	if (snakeTouchFood) {
+		gameEngineSpeed += .2;
+	}
 }
 
 function handleControllerDirection(e) {
@@ -148,6 +155,7 @@ function onKeydown(e) {
 }
 
 function startNewGame() {
+	gameEngineSpeed = 5;
 	gameOver = false;
 	gamePaused = false;
 	gamePlayInteractionStarted = false;
@@ -559,7 +567,7 @@ function drawSnake() {
 			break;
 		case GRID_DIRECTION.left:
 			drawSnakeEye(
-				SNAKE_COSTUME.leftEye, headFeatures.left, headFeatures.top, 
+				SNAKE_COSTUME.rightEye, headFeatures.left, headFeatures.top, 
 				headFeatures.radius);
 			break;
 		default:
