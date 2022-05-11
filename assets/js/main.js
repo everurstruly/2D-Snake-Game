@@ -61,7 +61,7 @@ PAUSE_PLAY_BTN.addEventListener('click', pausePlaySnakeGame);
 PLAY_AGAIN_BTN.addEventListener('click', startNewGame);
 gameEngineLoop_1 = requestAnimationFrame(handleGameLoop);
 document.addEventListener('keydown', onKeydown);
-window.addEventListener('load', () => handleGameAssetsReady);
+window.addEventListener('load', handleGameAssetsReady);
 
 function handleGameAssetsReady() {
 	if (window.outerWidth < SCREEN_CAN_PLAY) {
